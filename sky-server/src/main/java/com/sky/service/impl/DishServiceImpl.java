@@ -1,11 +1,17 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Employee;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +54,23 @@ public class DishServiceImpl implements DishService {
             //向口味表插入n条数据
             dishFlavorMapper.insertBatch(flavors);
         }
+    }
+
+    /**
+     * 菜品分页查询
+     * @param dishPageQueryDTO
+     * @return
+     */
+    public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO){
+        //开始分页查询(用mybatis中的pageHelper插件实现)
+        PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
+        //前后看似没有关系，但是由于pagehelper的部分参数是源于threadlocal，而每一次请求thread都是同一个，所以是可以向后传参的
+        Page<DishVO> page = dishMapper.pageQuery(dishPageQueryDTO);
+
+        long total = page.getTotal();
+        List<DishVO> records = page.getResult();
+
+        return new PageResult(total,records);
     }
 
 }
