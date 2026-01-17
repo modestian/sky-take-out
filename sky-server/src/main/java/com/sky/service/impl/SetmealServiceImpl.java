@@ -73,4 +73,22 @@ public class SetmealServiceImpl implements SetmealService {
 
         return new PageResult(total,records);
     }
+
+    /**
+     * 根据id查询套餐
+     * @param id
+     * @return
+     */
+    public SetmealVO getByIdWithDishes(Long id){
+        //根据id查询套餐
+        Setmeal setmeal = setmealMapper.getById(id);
+        //根据套餐id查询包含的菜品
+        List<SetmealDish> setmealDishes = setmealDishMapper.getDishIdBySetmealId(id);
+
+        SetmealVO setmealVO = new SetmealVO();
+        BeanUtils.copyProperties(setmeal,setmealVO);
+
+        setmealVO.setSetmealDishes(setmealDishes);
+        return setmealVO;
+    }
 }

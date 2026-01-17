@@ -14,7 +14,7 @@ public interface DishService {
      * 新增菜品与口味
      * @param dishDTO
      */
-    public void saveWithFlavor(DishDTO dishDTO);
+    void saveWithFlavor(DishDTO dishDTO);
 
     /**
      * 菜品分页查询
