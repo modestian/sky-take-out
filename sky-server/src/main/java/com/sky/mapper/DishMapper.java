@@ -66,9 +66,17 @@ public interface DishMapper {
     void update(Dish dish);
 
     /**
-     * 根据套餐id查询菜品信息
+     * 根据分类id查询菜品信息
      * @param dish
      * @return
      */
     List<Dish> list(Dish dish);
+
+    /**
+     * 根据套餐-菜品表中的套餐id得到菜品id然后得到菜品信息
+     * @param id
+     * @return
+     */
+    @Select("select a.* from dish a left join setmeal_dish b on a.id = b.dish_id where b.setmeal_id = #{setmealId}")
+    List<Dish> getBySetmealId(Long id);
 }
