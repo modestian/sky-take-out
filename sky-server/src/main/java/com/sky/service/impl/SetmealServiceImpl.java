@@ -7,9 +7,11 @@ import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Dish;
+import com.sky.entity.DishFlavor;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
@@ -32,6 +34,8 @@ public class SetmealServiceImpl implements SetmealService {
     private SetmealMapper setmealMapper;
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private DishMapper dishMapper;
 
     /**
      * 新增套餐数据以及包含的菜品
@@ -115,5 +119,30 @@ public class SetmealServiceImpl implements SetmealService {
 
         //根据套餐id删除对应的套餐菜品
         setmealDishMapper.deleteBySetmealIds(ids);
+    }
+
+    /**
+     * 修改套餐以及包含的菜品信息
+     * @param setmealDTO
+     */
+    public void updateWithDish(SetmealDTO setmealDTO){
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO,setmeal);
+
+        //删除套餐数据
+        setmealMapper.update(setmeal);
+
+        //删除包含的菜品数据
+        Long setmealId = setmeal.getId();
+        setmealDishMapper.deleteBySetmealId(setmealId);
+
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        if(setmealDishes != null && setmealDishes.size() > 0){
+            setmealDishes.forEach(setmealDish -> {
+                setmealDish.setSetmealId(setmealDTO.getId());
+            });
+            //向套餐菜品表插入n条数据
+            setmealDishMapper.insertBatch(setmealDishes);
+        }
     }
 }

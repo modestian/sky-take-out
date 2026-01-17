@@ -74,8 +74,21 @@ public class SetmealController {
     @DeleteMapping
     @ApiOperation("批量删除套餐")
     public Result delete(@RequestParam List<Long> ids){
-        log.info("菜品批量套餐:{}", ids);
+        log.info("批量删除套餐:{}", ids);
         setmealService.deleteBatch(ids);
+        return Result.success();
+    }
+
+    /**
+     * 修改套餐
+     * @param setmealDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改套餐")
+    public Result update(@RequestBody SetmealDTO setmealDTO){
+        log.info("修改套餐:{}", setmealDTO);
+        setmealService.updateWithDish(setmealDTO);
         return Result.success();
     }
 
