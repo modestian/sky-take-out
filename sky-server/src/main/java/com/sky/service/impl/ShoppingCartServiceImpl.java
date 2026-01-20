@@ -109,7 +109,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         //如果商品大于一个，则只需要更新数量减1
         if(cart.getNumber() > 1){
             cart.setNumber(cart.getNumber() - 1);
-            shoppingCartMapper.updateNumberById(cart);
+            shoppingCartMapper.updateNumberById(cart);//要注意更新到数据库中
         }else{
             //如果商品数量等于一，那么就直接删除
             Long id = cart.getId();
