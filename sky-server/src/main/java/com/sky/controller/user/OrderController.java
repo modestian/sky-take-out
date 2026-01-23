@@ -35,8 +35,8 @@ public class OrderController {
     @PostMapping("/submit")
     public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO){
         log.info("用户下单:{}",ordersSubmitDTO);
-        orderService.submitOrder(ordersSubmitDTO);
-        return Result.success();
+        OrderSubmitVO orderSubmitVO = orderService.submitOrder(ordersSubmitDTO);
+        return Result.success(orderSubmitVO);
     }
 
     /**
@@ -51,6 +51,9 @@ public class OrderController {
         log.info("订单支付：{}", ordersPaymentDTO);
         OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
         log.info("生成预支付交易单：{}", orderPaymentVO);
+        //直接调用微信支付成功功能
+        orderService.paySuccess(ordersPaymentDTO.getOrderNumber());
+
         return Result.success(orderPaymentVO);
     }
 
