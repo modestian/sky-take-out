@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Update;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -66,12 +67,9 @@ public interface OrderMapper {
     List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime orderTime);
 
     /**
-     * 替换微信支付更新数据状态的问题
-     * @param orderStatus
-     * @param orderPaidStatus
-     * @param checkOutTime
-     * @param orderNumber
+     * 根据动态条件传入的map求日期订单营业总额
+     * @param map
+     * @return
      */
-    @Update("update orders set status = #{orderStatus}, pay_status = #{payStatus}, checkout_time = #{checkOutTime} where number = #{orderNumber}" )
-    void updateStatus(Integer orderStatus, Integer orderPaidStatus, LocalDateTime checkOutTime, String orderNumber);
+    Double sumByMap(Map map);
 }
