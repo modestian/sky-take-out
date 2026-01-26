@@ -10,11 +10,11 @@ public interface WorkspaceService {
 
     /**
      * 根据时间段统计营业数据
-     * @param begin
-     * @param end
+     * @param beginTime
+     * @param endTime
      * @return
      */
-    BusinessDataVO getBusinessData(LocalDateTime begin, LocalDateTime end);
+    BusinessDataVO getBusinessData(LocalDateTime beginTime, LocalDateTime endTime);
 
     /**
      * 查询订单管理数据
